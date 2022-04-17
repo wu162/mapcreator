@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>three.js webgl - geometry - terrain</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {
+            background-color: #bfd1e5;
+            color: #61443e;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<!-- Import maps polyfill -->
+<!-- Remove this when import maps will be widely supported -->
+<script async src="./js/es-module-shims.js"></script>
+
+<script type="importmap">
+{
+    "imports":
+    {
+        "three":"./js/three.module.js", 
+        "OrbitControls":"./js/control/OrbitControls.js",
+        "HeightMap":"./js/control/HeightMap.js"
+    }
+}
+</script>
+
+<script type="module" src="./js/core/main.js">
+</script>
+</body>
+</html>
