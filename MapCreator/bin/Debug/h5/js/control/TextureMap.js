@@ -41,30 +41,40 @@ class TextureMap {
 
         context = this.finalTexture.getContext('2d');
         context.drawImage(this.terrainTexture, 0,0)
-        context.fillStyle = "#0000ff";
-        context.fillRect(0, 0, 60, 60)
+        // context.fillStyle = "#0000ff";
+        // context.fillRect(0, 0, 60, 60)
 
         return this.finalTexture;
     }
 
     onPointerMove(intersect) {
-        const uv = intersect.uv;
+        if (this.app.mode == 1) {
+            const uv = intersect.uv;
 
-        let realX = uv.x * this.finalTexture.width
-        let realY = this.finalTexture.height - uv.y * this.finalTexture.height
-        let context = this.finalTexture.getContext('2d');
-        context.clearRect( 0, 0, this.finalTexture.width, this.finalTexture.height );
-        context.drawImage(this.terrainTexture, 0,0)
-        context.fillStyle = "rgba(80,80,120,0.6)";
-        context.fillRect(realX - this.radius,  realY - this.radius, this.radius * 2, this.radius * 2)
-        this.texture.needsUpdate = true
+            let realX = uv.x * this.finalTexture.width
+            let realY = this.finalTexture.height - uv.y * this.finalTexture.height
+            let context = this.finalTexture.getContext('2d');
+            context.clearRect( 0, 0, this.finalTexture.width, this.finalTexture.height );
+            context.drawImage(this.terrainTexture, 0,0)
+            context.fillStyle = "rgba(80,80,120,0.6)";
+            context.fillRect(realX - this.radius,  realY - this.radius, this.radius * 2, this.radius * 2)
+            this.texture.needsUpdate = true
+        }
     }
 
-    onPointerDown(intersect) {
+    onLeftDown(event) {
 
     }
 
-    onPointerUp(intersect) {
+    onRightDown(event) {
+
+    }
+
+    onMiddleDown(event) {
+
+    }
+
+    onMouseUp(event) {
 
     }
 }

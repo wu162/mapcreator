@@ -14,7 +14,7 @@ class App {
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 10, 30000);
         this.textureMap = new TextureMap(this)
         this.heightMap = new HeightMap(this)
-        this.mode = 1
+        this.mode = 0
         this.init();
     }
 
@@ -33,7 +33,7 @@ class App {
         this.controls.maxDistance = 18000;
         this.controls.maxPolarAngle = Math.PI / 2;
         this.controls.target.z = 100;
-        this.controls.enableRotate = false
+        this.controls.enableRotate = true
         // this.controls.target.z = 200;
         // this.controls.target.x = 1000;
         // this.controls.rotateX(-Math.PI / 2)
@@ -73,8 +73,8 @@ let app = new App();
 app.animate()
 
 app.container.addEventListener('pointermove', onPointerMove)
-app.container.addEventListener('pointerdown', onPointerDown);
-app.container.addEventListener('pointerup', onPointerUp);
+app.container.addEventListener('mousedown', onMouseDown);
+app.container.addEventListener('mouseup', onMouseUp);
 
 window.addEventListener('keydown', onKeyDown);
 window.addEventListener('resize', onWindowResize);
@@ -95,40 +95,33 @@ function onPointerMove(event) {
 
 }
 
-function onPointerDown( event ) {
-
-    // app.pointer.x = (event.clientX / app.renderer.domElement.clientWidth) * 2 - 1;
-    // app.pointer.y = -(event.clientY / app.renderer.domElement.clientHeight) * 2 + 1;
-    //
-    // app.raycaster.setFromCamera( app.pointer, app.camera );
-    //
-    // const intersects = app.raycaster.intersectObjects(app.heightMap.mesh);
-
-    // if ( intersects.length > 0 ) {
-    //     const intersect = intersects[ 0 ];
-        app.heightMap.onPointerDown(null)
-        app.textureMap.onPointerDown(null)
-    // }
+function onMouseDown( event ) {
+    if (event.button == 0) {
+        // 左键
+        app.heightMap.onLeftDown(event)
+        app.textureMap.onLeftDown(event)
+    } else if (event.button == 1) {
+        // 中键
+        app.heightMap.onMiddleDown(event)
+        app.textureMap.onMiddleDown(event)
+    } else if (event.button == 2) {
+        // 右键
+        app.heightMap.onRightDown(event)
+        app.textureMap.onRightDown(event)
+    }
 
 }
 
-function onPointerUp(event) {
-
-    // app.pointer.x = (event.clientX / app.renderer.domElement.clientWidth) * 2 - 1;
-    // app.pointer.y = -(event.clientY / app.renderer.domElement.clientHeight) * 2 + 1;
-    //
-    // app.raycaster.setFromCamera( app.pointer, app.camera );
-    //
-    // const intersects = app.raycaster.intersectObjects(app.heightMap.mesh);
-    //
-    // if ( intersects.length > 0 ) {
-    //     const intersect = intersects[ 0 ];
-    //     app.heightMap.onPointerUp(intersect)
-    //     app.textureMap.onPointerUp(intersect)
-    // } else {
-        app.heightMap.onPointerUp(null)
-        app.textureMap.onPointerUp(null)
-    // }
+function onMouseUp(event) {
+    if (event.button == 0) {
+        // 左键
+    } else if (event.button == 1) {
+        // 中键
+    } else if (event.button == 2) {
+        // 右键
+    }
+    app.heightMap.onMouseUp(event)
+    app.textureMap.onMouseUp(event)
 }
 
 function onKeyDown(event) {
@@ -136,6 +129,7 @@ function onKeyDown(event) {
     switch (event.keyCode) {
         case 32:
             app.controls.enableRotate = !app.controls.enableRotate
+            app.mode = app.controls.enableRotate ? 0 : 1
             break
     }
 }

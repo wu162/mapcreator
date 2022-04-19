@@ -14,7 +14,7 @@ class HeightMap {
         this.geometry = new THREE.PlaneBufferGeometry(this.mapWidth << this.cellSizeShift, this.mapHeight << this.cellSizeShift, this.mapWidth, this.mapHeight);
         this.addTerrain();
         this.radius = 60
-        this.pointerDown = false
+        this.leftDown = false
         // this.initHelper()
     }
 
@@ -57,13 +57,31 @@ class HeightMap {
     }
 
     onPointerMove(intersect) {
-        if (this.pointerDown) {
+        if (this.leftDown && this.app.mode == 1) {
+            console.log("onPointerMove2")
             // console.log("test")
             // let vertGroupIndex = this.getVertIndex(intersect.x, intersect.z)
             // this.geometry.attributes.position.array[vertGroupIndex * 3 + 1] += 2000
             // this.geometry.attributes.position.needsUpdate = true
+            for (let i = -this.radius;i < this.radius;i++) {
+                for (let j = -this.radius;j < this.radius;j++) {
+                    let nx = intersect.point.x + i
+                    let nz = intersect.point.y + j
+                    console.log(nx + " , " + nz)
+                    if (this.inbound(nx, nz)) {
+                        console.log("inbound")
+                        let vertGroupIndex = this.getVertIndex(nx, nz)
+                        this.geometry.attributes.position.array[vertGroupIndex * 3 + 1] = 200
+                    }
+                }
+            }
+            this.geometry.attributes.position.needsUpdate = true
         }
         // console.log(vertIndex + "  |  " + vertXIndex + " , " + vertZIndex)
+    }
+
+    inbound(nx, ny) {
+        return nx >= -this.mapWidth && nx <= this.mapWidth && ny >= -this.mapHeight && ny <= this.mapHeight
     }
 
     getVertIndex(x,z) {
@@ -75,16 +93,24 @@ class HeightMap {
         return vertGroupIndex
     }
 
-    onPointerDown(intersect) {
-        for (let i = 1 ;i < this.mapWidth * 500;i+=3) {
-            this.geometry.attributes.position.array[i] = 400
-        }
-        this.geometry.attributes.position.needsUpdate = true
-        this.pointerDown = true
+    onLeftDown(event) {
+        // for (let i = 1 ;i < this.mapWidth * 500;i+=3) {
+        //     this.geometry.attributes.position.array[i] = 400
+        // }
+        // this.geometry.attributes.position.needsUpdate = true
+        this.leftDown = true
     }
 
-    onPointerUp(intersect) {
-        this.pointerDown = false
+    onRightDown(event) {
+
+    }
+
+    onMiddleDown(event) {
+
+    }
+
+    onMouseUp(event) {
+        this.leftDown = false
     }
 }
 
