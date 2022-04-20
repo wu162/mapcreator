@@ -11,9 +11,9 @@ class HeightMap {
         this.app = app
         this.textureMap = app.textureMap
         // this.heights = this.getHeights(mapWidth, 200);
-        this.geometry = new THREE.PlaneBufferGeometry(this.mapWidth << this.cellSizeShift, this.mapHeight << this.cellSizeShift, this.mapWidth, this.mapHeight);
+        this.geometry = new THREE.PlaneBufferGeometry(this.mapWidth << this.cellSizeShift, this.mapHeight << this.cellSizeShift, this.mapWidth - 1, this.mapHeight - 1);
         this.addTerrain();
-        this.radius = 60
+        this.radius = 100
         this.leftDown = false
         // this.initHelper()
     }
@@ -30,12 +30,6 @@ class HeightMap {
 
         const size = width * height, data = new Uint8Array(size);
 
-        // for (let j = 0; j < 4; j++) {
-        //     for (let i = 0; i < size; i++) {
-        //         data[i] += 2;
-        //     }
-        // }
-
         return data;
 
     }
@@ -45,39 +39,30 @@ class HeightMap {
 
         const vertices = this.geometry.attributes.position.array;
 
-        // for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
-        //     vertices[j + 1] = this.heights[i] * 10;
-        // }
         for (var i = 0; i < vertices.length / 3; i++) {
             vertices[i * 3 + 1] = 0;
         }
-        console.log(vertices.length)
-        this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({map: this.textureMap.texture, side: THREE.DoubleSide}));
+        // console.log(vertices.length)
+        let textureLoader = new THREE.TextureLoader();
+        let texture = textureLoader.load("../../assets/images/wall.jpeg");
+        this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshLambertMaterial({map: texture, side: THREE.DoubleSide}));
         this.app.scene.add(this.mesh);
     }
 
     onPointerMove(intersect) {
         if (this.leftDown && this.app.mode == 1) {
-            console.log("onPointerMove2")
-            // console.log("test")
-            // let vertGroupIndex = this.getVertIndex(intersect.x, intersect.z)
-            // this.geometry.attributes.position.array[vertGroupIndex * 3 + 1] += 2000
-            // this.geometry.attributes.position.needsUpdate = true
             for (let i = -this.radius;i < this.radius;i++) {
                 for (let j = -this.radius;j < this.radius;j++) {
                     let nx = intersect.point.x + i
-                    let nz = intersect.point.y + j
-                    console.log(nx + " , " + nz)
+                    let nz = intersect.point.z + j
                     if (this.inbound(nx, nz)) {
-                        console.log("inbound")
                         let vertGroupIndex = this.getVertIndex(nx, nz)
-                        this.geometry.attributes.position.array[vertGroupIndex * 3 + 1] = 200
+                        this.geometry.attributes.position.array[vertGroupIndex * 3 + 1] = 100
                     }
                 }
             }
             this.geometry.attributes.position.needsUpdate = true
         }
-        // console.log(vertIndex + "  |  " + vertXIndex + " , " + vertZIndex)
     }
 
     inbound(nx, ny) {
@@ -85,11 +70,9 @@ class HeightMap {
     }
 
     getVertIndex(x,z) {
-        let nx = Math.round(x);
-        let nz = Math.round(z);
+        let nx = x
+        let nz = z
         let vertGroupIndex = ((nz + this.mapHeight) >> this.cellSizeShift) * this.mapWidth + ((nx + this.mapWidth) >> this.cellSizeShift);
-        // let vertXIndex = vertIndex * 3
-        // let vertZIndex = vertIndex * 3 + 2
         return vertGroupIndex
     }
 

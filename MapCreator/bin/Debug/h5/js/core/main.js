@@ -12,6 +12,7 @@ class App {
         this.renderer = new THREE.WebGLRenderer({antialias: true});
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 10, 30000);
+        this.light = new THREE.AmbientLight(0xeeeeee)
         this.textureMap = new TextureMap(this)
         this.heightMap = new HeightMap(this)
         this.mode = 0
@@ -24,12 +25,13 @@ class App {
         this.initScene();
         this.initViewControl();
         this.initCamera();
+        this.initLight()
         this.controls.update();
     }
 
     initViewControl() {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.minDistance = 10;
+        this.controls.minDistance = 2;
         this.controls.maxDistance = 18000;
         this.controls.maxPolarAngle = Math.PI / 2;
         this.controls.target.z = 100;
@@ -67,6 +69,10 @@ class App {
 
     render() {
         this.renderer.render(this.scene, this.camera);
+    }
+
+    initLight() {
+        this.scene.add(this.light)
     }
 }
 let app = new App();

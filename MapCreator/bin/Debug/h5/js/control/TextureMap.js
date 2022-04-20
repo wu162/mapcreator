@@ -25,8 +25,12 @@ class TextureMap {
         this.terrainTexture.height = height;
 
         context = this.terrainTexture.getContext('2d');
-        context.fillStyle = '#345324';
-        context.fillRect(0, 0, width, height);
+        let textureLoader = new THREE.TextureLoader();
+        let texture = textureLoader.load("../../assets/images/wall.jpeg");
+        texture.image = this.terrainTexture
+
+        // context.fillStyle = '#345324';
+        // context.fillRect(0, 0, width, height);
 
         // image = context.getImageData(0, 0, this.terrainTexture.width, this.terrainTexture.height);
         // imageData = image.data;
@@ -44,21 +48,21 @@ class TextureMap {
         // context.fillStyle = "#0000ff";
         // context.fillRect(0, 0, 60, 60)
 
-        return this.finalTexture;
+        return this.terrainTexture;
     }
 
     onPointerMove(intersect) {
         if (this.app.mode == 1) {
-            const uv = intersect.uv;
-
-            let realX = uv.x * this.finalTexture.width
-            let realY = this.finalTexture.height - uv.y * this.finalTexture.height
-            let context = this.finalTexture.getContext('2d');
-            context.clearRect( 0, 0, this.finalTexture.width, this.finalTexture.height );
-            context.drawImage(this.terrainTexture, 0,0)
-            context.fillStyle = "rgba(80,80,120,0.6)";
-            context.fillRect(realX - this.radius,  realY - this.radius, this.radius * 2, this.radius * 2)
-            this.texture.needsUpdate = true
+            // const uv = intersect.uv;
+            //
+            // let realX = uv.x * this.finalTexture.width
+            // let realY = this.finalTexture.height - uv.y * this.finalTexture.height
+            // let context = this.finalTexture.getContext('2d');
+            // context.clearRect( 0, 0, this.finalTexture.width, this.finalTexture.height );
+            // context.drawImage(this.terrainTexture, 0,0)
+            // context.fillStyle = "rgba(80,80,120,0.6)";
+            // context.fillRect(realX - this.radius,  realY - this.radius, this.radius * 2, this.radius * 2)
+            // this.texture.needsUpdate = true
         }
     }
 
