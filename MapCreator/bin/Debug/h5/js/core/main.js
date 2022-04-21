@@ -16,6 +16,7 @@ class App {
         this.textureMap = new TextureMap(this)
         this.heightMap = new HeightMap(this)
         this.mode = 0
+        this.radius = 30
         this.init();
     }
 
